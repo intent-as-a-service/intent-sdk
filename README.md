@@ -1,10 +1,246 @@
-# intent-sdk · 意图即服务（Intent as a Service）
+**English** · [中文](#chinese)
 
-> **去聊天框的 AI 接入方式**：业务页面放一排意图按钮，点击即执行，结果卡片内嵌返回。
-> AI 能力以**原生 SDK 进程内嵌入**业务系统 —— 权限、事务、数据范围完全沿用宿主，不建独立账号体系、不跨域、数据不出域。
+<a name="english"></a>
+# intent-sdk — Intent as a Service
+
+> **AI integration without the chat box.** A business page shows a row of *intent buttons*; one
+> click runs the intent and renders a structured result card in place. The AI runs **in-process, as
+> a native SDK, inside your application** — permissions, transactions and data scope stay exactly as
+> the host defines them. No separate account system, no cross-domain calls, no data leaving your
+> boundary.
 
 [![build](https://github.com/intent-as-a-service/intent-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/intent-as-a-service/intent-sdk/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
+
+---
+
+## The problem it solves
+
+Traditional "AI integration" drops an LLM into a chat box: users have to work out what to ask, and
+then carry the answer back into the business flow by hand. The result is **AI and the business
+running as two separate worlds** — you ask in the chat box, then click in the business system.
+
+Intent as a Service flips the direction: **AI is no longer an entry point, it is a capability.**
+
+| Chat box | Intent as a Service |
+|---|---|
+| Entry point: one global chat box | Entry point: intent buttons on the page, loaded per page |
+| The user phrases the request | The system declares the intent (id / params / tool allow-list / output contract) |
+| Output is a paragraph of prose | Output is a **standard result envelope** (`title` / `summary` / `blocks` / `followups` / `nextIntents`) the UI renders directly |
+| The answer has to be carried back by hand | "Next step" chips in the card are clickable (re-run with extra input / AI-recommended intent / host todo) |
+| Permissions, transactions and data scope have to be rebuilt | Tools call host services **in-process**, so permissions and transactions follow the call stack |
+| Every AI capability needs a release | Intent specs and fact rules are YAML — edited in the admin UI, **effective on save** |
+
+In one sentence: **move "what can be asked, how it should be asked, and what the answer looks like"
+out of the user's head and into the system.**
+
+## Catalog enrichment: from a list of capabilities to a list of todos
+
+By default the intent menu looks the same to everyone ("Account risk scan", "Login anomaly
+analysis"). Catalog enrichment attaches **business facts** to those entries:
+
+```
+One AI icon, but it opens showing:
+  📌 Todos · Account risk scan          expand
+     · "Zhang San" inactive for 91 days    zhangsan · R&D       · click to scan
+     · "Li Si" inactive for 63 days        lisi     · Marketing · click to scan
+  Badge: Login anomaly analysis  [17 failed logins in the last 24 hours]
+```
+
+Facts come from the business module's `IntentFactProvider` (**data only**); conditions and wording
+live in YAML. Change a threshold, a sentence, or the pages an intent appears on by editing one YAML
+file — no Java change, no release. A malformed rule **fails at startup** rather than silently
+producing no todos.
+
+---
+
+## Architecture
+
+![Architecture](./docs/diagrams/01-总体架构图.png)
+
+**Three boundaries decide whether this survives in the long run:**
+
+1. **SDK decoupled from the host framework** — `intent-sdk-core` / `intent-sdk-host` carry **no
+   Spring dependency**; identity, permissions and the context bridge are SPI implementations the
+   host provides. Changing hosts means rewriting three classes.
+2. **SDK decoupled from the AI engine** — the tool contract is the SDK's own `IntentTool`;
+   pi-ai / pi-agent appear in **exactly one module (`intent-sdk-pi`)**. Swap inference engines by
+   swapping that module. **Pure-process scenarios (skill / flow executors) need no pi at all — and
+   therefore no LLM.**
+3. **Platform decoupled from business** — business modules only declare things (tool beans + YAML)
+   and touch no platform code. Delete a business module and the framework still runs, just without
+   those intents.
+
+## Modules
+
+| Module | Depends on | Purpose |
+|---|---|---|
+| `intent-protocol` | Jackson only | Protocol DTOs: `IntentSpec` / `IntentRequest` / `IntentResult` / `CatalogResponse`… local and remote results share one shape |
+| `intent-sdk-core` | Jackson only — **no Spring, no pi** | Execution engine core: spec loading and validation, orchestration, catalog assembly, tool contract |
+| `intent-sdk-host` | core | Host SPI (identity / permissions / context / repositories) + a **declarative fact-rule engine** |
+| `intent-sdk-pi` | core + **pi-ai / pi-agent** | Executor implementations: the `builtin-agent` reasoning loop, deterministic `skill` steps, `flow` orchestration |
+| `intent-sdk-gateway` | core | Cross-system intent gateway client (**optional**: leave it out and everything stays local) |
+| `intent-spring-boot-starter` | host + Spring Boot | Auto-configuration: default SPI implementations plus rule-engine wiring |
+
+## Quick start
+
+> **Status: 0.1.0-SNAPSHOT, not published.** Artifacts are not on Maven Central yet — install from
+> source into your local repository first:
+>
+> ```bash
+> # 1) Install the inference engine first (only needed for agent-type executors;
+> #    skip it entirely for pure skill/flow scenarios)
+> git clone <the pi-java repository> && cd pi-java && mvn install -DskipTests
+>
+> # 2) Then install the intent SDK
+> cd intent-sdk && mvn install -DskipTests
+> ```
+>
+> This section becomes a plain dependency once publishing lands.
+
+### 1. Add the dependency
+
+```xml
+<dependency>
+    <groupId>io.github.intent-as-a-service</groupId>
+    <artifactId>intent-spring-boot-starter</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+</dependency>
+```
+
+> **Pure-process use (no LLM needed)**: exclude `intent-sdk-pi` and the `skill` / `flow` executors
+> keep working. You then do not need pi-ai / pi-agent at all — the core modules depend on Jackson and
+> nothing else.
+
+### 2. Wrap host capabilities as tools (Java, 1–3 per intent)
+
+```java
+@Component
+public class OrderQueryTool implements IntentTool {
+
+    private final OrderService orderService;   // inject the host service directly
+
+    @Override public String name() { return "order_query"; }
+
+    @Override public String description() {
+        // This text goes straight into the model prompt and decides whether the model
+        // uses the tool correctly — be explicit about which questions it can answer.
+        return "Query orders by customer and status; returns order no., amount, status and creation time.";
+    }
+
+    @Override public Map<String, Object> parameters() {
+        return Schemas.object(Map.of(
+                "customerId", Schemas.string("Customer id"),
+                "limit",      Schemas.number("Max rows to return")
+        ), List.of());
+    }
+
+    @Override public IntentToolResult execute(String id, Map<String, Object> args, IntentToolContext ctx) {
+        // In-process call: permissions and transactions ride the host call stack.
+        return IntentToolResult.data(orderService.query(args));
+    }
+}
+```
+
+### 3. Declare an intent (YAML, one file per intent)
+
+```yaml
+# src/main/resources/intent/order.overdue.scan.yaml
+id: order.overdue.scan            # system.domain.action
+name: Overdue order diagnosis
+description: Review overdue orders, grade them by customer and amount, rank collection priority
+scope: local
+pages: [order/list, ""]           # only on these pages; "" = the intent centre
+promptTemplate: |
+  You are an order risk analyst. Call order_query first to get the overdue-order facts;
+  never invent data. Lead with the conclusion; use a table for the top overdue orders and
+  badges for risk levels; every number must come from the tool, otherwise write "insufficient data".
+paramsSchema:
+  type: object
+  properties:
+    customerId: { type: string, title: Customer id }
+  required: []
+context:
+  - { key: customerId, title: Current customer, required: false }   # auto-filled from the page
+tools: [order_query]              # tool allow-list (omit = all tools; not recommended)
+policy:
+  roles: ["*"]
+  timeoutSeconds: 180
+```
+
+**All five elements must be present before an intent can be published, and they are validated hard
+at startup** — an unknown intent, a parameter outside the params schema, or a template referencing an
+unknown field stops the service from booting.
+
+### 4. Mount the front end (framework-agnostic vanilla JS)
+
+```ts
+IntentUI.configure({ apiPrefix: '/api/intent', authHeaders: () => ({ Authorization: 'Bearer ' + token }) });
+IntentUI.mountFloating({ getPage: () => route.path.slice(1), getContext: () => pageContext() });
+```
+
+Batteries included: floating entry point / intent menu / slot form / todo groups / result cards /
+execution trace / history / feedback. Works with Vue 2, Vue 3, React, jQuery and server-rendered
+templates alike ([intent-ui-sdk](https://github.com/intent-as-a-service/intent-ui-sdk)).
+
+## Hosts in production
+
+| Host | Integration | Intents shipped |
+|---|---|---|
+| [RuoYi-Vue-Plus](https://github.com/intent-as-a-service/RuoYi-Vue-Plus) | SDK embedded | 14 (account hygiene / permission review / login anomalies / cache diagnosis …) |
+| [ruoyi-office](https://github.com/intent-as-a-service/ruoyi-office) (yudao) | SDK embedded | 40 (full CRM chain) |
+
+## Measured numbers
+
+| Scenario | Duration | Tokens |
+|---|---|---|
+| agent-type intent (reasoning loop + 11 tool calls) | 19–23 s | 7.7k–10.8k |
+| **skill-type intent (pure tool steps, zero LLM)** | **13–51 ms** | **0** |
+
+> For data-fetching intents that need no live judgement, freeze them into a skill-type executor
+> profile — roughly 400× faster, zero cost, and auditable.
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [Architecture design](./docs/架构设计方案.md) | Full design: the five elements, execution path, catalog enrichment, gateway |
+| [Integration & delivery guide](./docs/集成交付指南.md) | Three steps to integrate a legacy system, effort involved, delivery SOP at scale |
+| [Migration guide](./docs/迁移方案-新系统接入.md) | What changes when swapping hosts, current gaps |
+| [Feature list](./docs/功能清单.md) | Implemented vs planned, item by item |
+| [Deployment guide](./docs/部署运行指南.md) | Infrastructure, build, start-up, demo |
+| [Field notes](./docs/意图即服务-真实案例.md) | What it took to land in a real business system |
+
+*(The documents above are currently written in Chinese.)*
+
+## Design trade-offs
+
+- **Why a "context bridge" is mandatory**: the reasoning loop runs tools on a separate thread, while
+  the host's login state and data scope live on the original one. Not carrying the context over does
+  not raise an error — it **silently returns wrong results** (data belonging to someone else, or
+  nothing at all).
+- **Why hiding from the catalog is not authorization**: anyone who knows an intent id can POST to the
+  execution endpoint, so permissions are re-checked independently before every execution.
+- **Why specs live in a database rather than a read-only classpath**: operators need to publish,
+  unpublish and re-scope intents without a release. Seeding only writes when a spec is physically
+  absent, so an intent deleted in the admin UI does not come back after a restart.
+- **Known limitations**: whole-card responses (no streaming), single-turn execution (no multi-turn
+  conversation), gateway server side not implemented. See the
+  [feature list](./docs/功能清单.md).
+
+## License
+
+[Apache License 2.0](./LICENSE)
+
+---
+
+<a name="chinese"></a>
+# intent-sdk · 意图即服务（Intent as a Service）
+
+[English](#english) · **中文**
+
+> **去聊天框的 AI 接入方式**：业务页面放一排意图按钮，点击即执行，结果卡片内嵌返回。
+> AI 能力以**原生 SDK 进程内嵌入**业务系统 —— 权限、事务、数据范围完全沿用宿主，不建独立账号体系、不跨域、数据不出域。
 
 ---
 
@@ -166,8 +402,8 @@ Vue2 / Vue3 / React / jQuery / 服务端模板都能用（[intent-ui-sdk](https:
 
 | 宿主 | 集成方式 | 现成意图 |
 |------|---------|---------|
-| [RuoYi-Vue-Plus](https://github.com/intent-as-a-service/intent-for-ruoyi-vue-plus) | SDK 嵌入 | 14 个（账号治理 / 权限体检 / 登录异常 / 缓存诊断……） |
-| yudao（ruoyi-vue-pro） | SDK 嵌入 | 40 个（CRM 全链路） |
+| [RuoYi-Vue-Plus](https://github.com/intent-as-a-service/RuoYi-Vue-Plus) | SDK 嵌入 | 14 个（账号治理 / 权限体检 / 登录异常 / 缓存诊断……） |
+| [ruoyi-office](https://github.com/intent-as-a-service/ruoyi-office)（yudao） | SDK 嵌入 | 40 个（CRM 全链路） |
 
 ## 实测数据
 
