@@ -88,14 +88,22 @@ producing no todos.
 > source into your local repository first:
 >
 > ```bash
-> # 1) Install the inference engine first (only needed for agent-type executors;
-> #    skip it entirely for pure skill/flow scenarios)
-> git clone <the pi-java repository> && cd pi-java && mvn install -DskipTests
->
-> # 2) Then install the intent SDK
+> git clone git@github.com:intent-as-a-service/intent-sdk.git
 > cd intent-sdk && mvn install -DskipTests
 > ```
 >
+> That default build covers the five **pi-free** modules and needs nothing beyond Maven Central.
+>
+> The executor module `intent-sdk-pi` (`builtin-agent` / `skill` / `flow`) depends on
+> `dev.pi:pi-ai` and `dev.pi:pi-agent`, which **are not published to any public repository yet** —
+> which is exactly why it is opt-in instead of part of the default reactor. Install it with:
+>
+> ```bash
+> # once dev.pi artifacts are resolvable (installed locally, or published)
+> mvn -Pwith-pi install -DskipTests
+> ```
+>
+> Running a reference host end to end needs the executors, so it needs that second command.
 > This section becomes a plain dependency once publishing lands.
 
 ### 1. Add the dependency
@@ -309,14 +317,22 @@ templates alike ([intent-ui-sdk](https://github.com/intent-as-a-service/intent-u
 > **当前状态（0.1.0-SNAPSHOT，未发布）**：制品尚未上 Maven 中央仓，请先从源码安装到本地仓库：
 >
 > ```bash
-> # 1) 先装推理引擎（只有 agent 型执行器需要；纯 skill/flow 场景可跳过）
-> git clone https://github.com/<pi-java 仓库> && cd pi-java && mvn install -DskipTests
->
-> # 2) 再装意图 SDK
+> git clone git@github.com:intent-as-a-service/intent-sdk.git
 > cd intent-sdk && mvn install -DskipTests
 > ```
 >
-> 中央仓发布后本节会替换为直接引依赖。
+> 这条默认只构建**零 pi 依赖**的五个模块，除中央仓外不需要任何额外东西。
+>
+> 执行器模块 `intent-sdk-pi`（`builtin-agent` / `skill` / `flow`）依赖 `dev.pi:pi-ai` 与
+> `dev.pi:pi-agent`，**这两个制品目前尚未发布到任何公共仓库** —— 这正是它被做成可选、
+> 而不放进默认反应堆的原因。需要时用：
+>
+> ```bash
+> # 前提：dev.pi 制品已可解析（本地已安装，或已发布到公共仓库）
+> mvn -Pwith-pi install -DskipTests
+> ```
+>
+> 端到端跑起参考宿主需要执行器，所以还要执行上面这条。中央仓发布后本节会替换为直接引依赖。
 
 ### 1. 引依赖
 

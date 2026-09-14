@@ -36,11 +36,22 @@
     <modules>
         <module>intent-protocol</module>
         <module>intent-sdk-core</module>
-        <module>intent-sdk-pi</module>
         <module>intent-sdk-host</module>
         <module>intent-spring-boot-starter</module>
         <module>intent-sdk-gateway</module>
     </modules>
+
+    <!--
+        注意：intent-sdk-pi 不在上面的默认模块列表里。
+
+        它依赖 dev.pi:pi-ai / dev.pi:pi-agent，而这两个制品目前尚未发布到任何公共仓库
+        （既不在一处中央仓，也没有公开的镜像）。一旦把它放进默认反应堆，
+        `mvn install` 对任何刚 clone 下来的人都会直接失败 —— 实测就是这样。
+
+        所以默认构建只包含「零 pi 依赖」的五个模块，保证拿到代码就能构建通过；
+        需要执行器实现（builtin-agent / skill / flow）时用 -Pwith-pi 加回来，
+        前提是 dev.pi 制品已经可解析。
+    -->
 
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
@@ -168,6 +179,20 @@
     </build>
 
     <profiles>
+        <!--
+            把执行器模块加回反应堆：mvn -Pwith-pi install
+
+            前置条件（二选一）：
+              1) 本地已有 dev.pi 制品：git clone <pi-java 仓库> && cd pi-java && mvn install -DskipTests
+              2) dev.pi 制品已发布到公共仓库（届时本 profile 可以并入默认构建）
+        -->
+        <profile>
+            <id>with-pi</id>
+            <modules>
+                <module>intent-sdk-pi</module>
+            </modules>
+        </profile>
+
         <!-- 发布到 Maven 中央仓库：mvn -Prelease deploy（需配置 gpg 与 distributionManagement） -->
         <profile>
             <id>release</id>
