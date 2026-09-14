@@ -48,17 +48,29 @@ public final class IntentMessages {
         }
     }
 
+    /**
+     * 关键：禁用 ResourceBundle 的「默认 locale 兜底」。
+     *
+     * <p>不禁用的话，{@code getBundle(BUNDLE, zh_CN)} 在 JVM 默认 locale 为英文的机器上
+     * （几乎所有 Linux 服务器 / CI / 容器）不会落到 base 包，而是优先命中
+     * {@code messages_en.properties} —— 于是 {@link #setLocale(Locale)} 显式锁了中文也不生效，
+     * 宿主以为语言已定，实际按宿主机器的 locale 走。这是实测踩出来的：同一份测试在中文
+     * Windows 上绿、在 en_US 的 CI runner 上红，断言的中文文案被渲染成了英文。</p>
+     */
+    private static final ResourceBundle.Control CONTROL =
+        ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES);
+
     private static String pattern(String key) {
         if (key == null) {
             return "";
         }
         try {
-            return ResourceBundle.getBundle(BUNDLE, locale).getString(key);
+            return ResourceBundle.getBundle(BUNDLE, locale, CONTROL).getString(key);
         } catch (MissingResourceException ignored) {
             // 落到兜底语言
         }
         try {
-            return ResourceBundle.getBundle(BUNDLE, FALLBACK).getString(key);
+            return ResourceBundle.getBundle(BUNDLE, FALLBACK, CONTROL).getString(key);
         } catch (MissingResourceException ignored) {
             return key;
         }
