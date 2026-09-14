@@ -15,12 +15,18 @@ import java.util.Optional;
  *   <li>宿主自研 DB 实现：后台可视化增删改（完整产品形态）。</li>
  * </ul>
  *
- * @param source 来源标记（builtin = classpath 种子 / custom = 后台创建），用于判断可否删除
+ * <p>「来源标记」用于判断某条规范可否删除：{@code builtin} 为 classpath 种子、{@code custom} 为后台创建。</p>
  */
 public interface IntentSpecRepository {
 
     List<IntentSpec> findAll();
 
+    /**
+     * 新增或覆盖一条意图规范。
+     *
+     * @param spec   意图规范
+     * @param source 来源标记（builtin = classpath 种子 / custom = 后台创建），用于判断可否删除
+     */
     void upsert(IntentSpec spec, String source);
 
     boolean delete(String intentId);

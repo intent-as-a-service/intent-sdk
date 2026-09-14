@@ -45,7 +45,7 @@ public final class IntentCatalogAssembler {
      * @param pageEntries    当前页面装载的目录项（前端渲染主体）
      * @param visibleEntries 当前用户可见的全部目录项（建议准入依据，不受页面过滤影响）
      * @param enrichers      宿主增强器（可为空）
-     * @param maxSuggestions 单个增强器（每条业务规则）的建议条数上限（<=0 表示不限制）
+     * @param maxSuggestions 单个增强器（每条业务规则）的建议条数上限（{@code <=0} 表示不限制）
      */
     public static Result assemble(IntentCatalogContext context,
             List<IntentCatalogEntry> pageEntries,
