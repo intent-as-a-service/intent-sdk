@@ -11,10 +11,10 @@ jobs:
     name: 构建「零 pi 依赖」模块（JDK 21）
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
@@ -57,7 +57,7 @@ jobs:
     name: 守卫「核心模块零 Spring / 零 pi 依赖」
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # 这是本项目的核心卖点之一：核心模块必须能脱离 Spring 与推理引擎独立使用。
       # 一旦有人往里加了 spring-* 或 dev.pi:* 依赖，宿主侧的"可替换性"就悄悄没了。
