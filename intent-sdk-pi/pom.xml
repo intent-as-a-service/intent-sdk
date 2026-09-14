@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.intent-as-a-service</groupId>
+        <artifactId>intent-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>intent-sdk-pi</artifactId>
+    <name>Intent SDK Pi Engine</name>
+    <description>推理内核适配器：以 pi-java（pi-ai + pi-agent）实现意图执行引擎。
+        这是整个 SDK 中唯一依赖具体 agent 框架的制品——意图协议、SDK 核心与宿主 SPI
+        均不依赖它，替换推理内核只需替换本模块。</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.intent-as-a-service</groupId>
+            <artifactId>intent-sdk-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.pi</groupId>
+            <artifactId>pi-ai</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.pi</groupId>
+            <artifactId>pi-agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

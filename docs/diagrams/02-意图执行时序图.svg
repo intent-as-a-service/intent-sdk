@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 760" width="960" height="760">
+  <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', 'SimHei', sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+    </marker>
+  </defs>
+  <rect width="960" height="760" fill="#ffffff"/>
+  <text x="480" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#111827">意图执行时序 · 本地 / 跨系统双分支</text>
+  <line x1="120" y1="52" x2="146" y2="52" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="152" y="56" font-size="11" fill="#6b7280">意图请求</text>
+  <line x1="250" y1="52" x2="276" y2="52" stroke="#ea580c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  <text x="282" y="56" font-size="11" fill="#6b7280">跨系统调用</text>
+  <line x1="380" y1="52" x2="406" y2="52" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+  <text x="412" y="56" font-size="11" fill="#6b7280">AI 推理</text>
+  <line x1="490" y1="52" x2="516" y2="52" stroke="#059669" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow-green)"/>
+  <text x="522" y="56" font-size="11" fill="#6b7280">数据返回</text>
+  <line x1="610" y1="52" x2="636" y2="52" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-gray)"/>
+  <text x="642" y="56" font-size="11" fill="#6b7280">返回 / 异步</text>
+  <rect x="15" y="70" width="110" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="70" y="97" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">业务用户</text>
+  <line x1="70" y1="114" x2="70" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="165" y="70" width="150" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="240" y="89" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">本系统 · 嵌入式运行时</text>
+  <text x="240" y="106" text-anchor="middle" font-size="10.5" fill="#6b7280">意图SDK + 分析器</text>
+  <line x1="240" y1="114" x2="240" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="375" y="70" width="110" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="430" y="89" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">LLM 执行引擎</text>
+  <text x="430" y="106" text-anchor="middle" font-size="10.5" fill="#6b7280">本系统</text>
+  <line x1="430" y1="114" x2="430" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="545" y="70" width="110" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="600" y="89" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">意图网关</text>
+  <text x="600" y="106" text-anchor="middle" font-size="10.5" fill="#6b7280">跨系统总线</text>
+  <line x1="600" y1="114" x2="600" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="715" y="70" width="150" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="790" y="89" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">目标系统 · 意图接口</text>
+  <text x="790" y="106" text-anchor="middle" font-size="10.5" fill="#6b7280">内嵌运行时</text>
+  <line x1="790" y1="114" x2="790" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="855" y="70" width="110" height="44" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="910" y="89" text-anchor="middle" font-size="12.5" font-weight="600" fill="#111827">评测反馈库</text>
+  <text x="910" y="106" text-anchor="middle" font-size="10.5" fill="#6b7280">Trace · 反馈</text>
+  <line x1="910" y1="114" x2="910" y2="712" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="70" y1="140" x2="236" y2="140" stroke="#2563eb" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+  <rect x="109" y="122" width="88" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="153.0" y="135" text-anchor="middle" font-size="12" fill="#374151">点击意图菜单</text>
+    <path d="M 240 166 L 266 166 L 266 182 L 246 182" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+  <rect x="272" y="162" width="245" height="18" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="279" y="176" font-size="11" fill="#374151">意图分析：scope 声明 + 上下文复核</text>
+  <rect x="52" y="200" width="856" height="130" fill="none" stroke="#d1d5db" stroke-width="1.2" stroke-dasharray="6,4"/>
+  <rect x="52" y="200" width="110" height="20" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="62" y="214" font-size="11" font-weight="600" fill="#1d4ed8">A · 本地意图</text>
+    <line x1="240" y1="244" x2="426" y2="244" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#arrow-purple)"/>
+  <rect x="265" y="226" width="136" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="333.0" y="239" text-anchor="middle" font-size="12" fill="#374151">推理请求（含上下文）</text>
+    <path d="M 430 270 L 456 270 L 456 286 L 436 286" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+  <rect x="462" y="266" width="245" height="18" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="469" y="280" font-size="11" fill="#374151">工具调用 · 宿主内部 SDK / API</text>
+    <line x1="430" y1="308" x2="244" y2="308" stroke="#059669" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrow-green)"/>
+  <rect x="305" y="290" width="64" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="337.0" y="303" text-anchor="middle" font-size="12" fill="#374151">推理结果</text>
+  <rect x="52" y="346" width="856" height="180" fill="none" stroke="#d1d5db" stroke-width="1.2" stroke-dasharray="6,4"/>
+  <rect x="52" y="346" width="128" height="20" rx="3" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="62" y="360" font-size="11" font-weight="600" fill="#c2410c">B · 跨系统意图</text>
+    <line x1="240" y1="392" x2="596" y2="392" stroke="#ea580c" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+  <rect x="386" y="374" width="64" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="418.0" y="387" text-anchor="middle" font-size="12" fill="#374151">意图调用</text>
+  <text x="418.0" y="406" text-anchor="middle" font-size="10.5" fill="#6b7280">标准 IntentRequest + 网关换发短时凭证</text>
+    <line x1="600" y1="428" x2="786" y2="428" stroke="#ea580c" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+  <rect x="619" y="410" width="148" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="693.0" y="423" text-anchor="middle" font-size="12" fill="#374151">目录路由 · 凭证校验</text>
+    <path d="M 790 458 L 764 458 L 764 474 L 784 474" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+  <rect x="557" y="454" width="201" height="18" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="751" y="468" text-anchor="end" font-size="11" fill="#374151">校验短时凭证 · 内嵌模式本地执行</text>
+    <line x1="790" y1="498" x2="604" y2="498" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrow-gray)"/>
+  <rect x="665" y="480" width="64" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="697.0" y="493" text-anchor="middle" font-size="12" fill="#374151">意图结果</text>
+    <line x1="596" y1="510" x2="244" y2="510" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrow-gray)"/>
+  <rect x="328" y="492" width="184" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="420.0" y="505" text-anchor="middle" font-size="12" fill="#374151">结果回传 · 调用链审计留痕</text>
+    <path d="M 240 560 L 266 560 L 266 576 L 246 576" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+  <rect x="272" y="556" width="344" height="18" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="279" y="570" font-size="11" fill="#374151">出参 Schema 校验 · 失败重试一次 / 降级人工表单</text>
+    <line x1="240" y1="606" x2="74" y2="606" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrow-gray)"/>
+  <rect x="47" y="588" width="220" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="157.0" y="601" text-anchor="middle" font-size="12" fill="#374151">渲染结果卡片（本地 / 远程同构）</text>
+    <line x1="240" y1="648" x2="906" y2="648" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrow-gray)"/>
+  <rect x="403" y="630" width="340" height="17" rx="3" fill="#ffffff" opacity="0.95"/>
+  <text x="573.0" y="643" text-anchor="middle" font-size="12" fill="#374151">执行 Trace · 用户反馈（异步，含跨系统调用链）</text>
+  <rect x="80" y="690" width="800" height="52" rx="6" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="480" y="711" text-anchor="middle" font-size="12" fill="#92400e">分流依据：IntentSpec 预声明 scope（本地 / 远程 / 组合）为主，运行时结合上下文复核；</text>
+  <text x="480" y="730" text-anchor="middle" font-size="12" fill="#92400e">本地工具直调宿主内部 SDK（进程内，权限与事务沿用宿主）；跨系统由网关换发短时凭证，结果与本地同构</text>
+</svg>

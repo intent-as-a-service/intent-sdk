@@ -1,0 +1,63 @@
+name: build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 构建「零 pi 依赖」模块（JDK 21）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # =============================================================
+      # 刻意只构建「不依赖 pi-ai / pi-agent」的模块。
+      #
+      # 原因有两个，都是真实的架构约束，不是省事：
+      #   1. pi-ai / pi-agent 是独立的 harness 项目（MIT），尚未发布到中央仓，
+      #      公共 CI 里解析不到坐标，构建 intent-sdk-pi 必然失败；
+      #   2. 这三个核心模块本身就不该依赖任何推理引擎 ——
+      #      intent-protocol / core / host 只依赖 Jackson，gateway 只依赖 core。
+      #      这条 CI 正好是这道边界的守门人：谁不小心把 pi 引进核心模块，CI 立刻红。
+      #
+      # 想在本机验证带 pi 的完整构建：
+      #   git clone <pi-java 仓库> && cd pi-java && mvn install -DskipTests
+      #   cd intent-sdk && mvn install -DskipTests
+      # =============================================================
+      - name: Build (pi-free modules)
+        run: >
+          mvn -B -ntp
+          -pl intent-protocol,intent-sdk-core,intent-sdk-host,intent-sdk-gateway,intent-spring-boot-starter
+          -am verify
+
+  guard-core-purity:
+    name: 守卫「核心模块零 Spring / 零 pi 依赖」
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 这是本项目的核心卖点之一：核心模块必须能脱离 Spring 与推理引擎独立使用。
+      # 一旦有人往里加了 spring-* 或 dev.pi:* 依赖，宿主侧的"可替换性"就悄悄没了。
+      - name: Check forbidden dependencies in core modules
+        run: |
+          set -e
+          fail=0
+          for m in intent-protocol intent-sdk-core intent-sdk-host intent-sdk-gateway; do
+            pom="$m/pom.xml"
+            if grep -Eq '<groupId>(org\.springframework|dev\.pi)' "$pom"; then
+              echo "::error file=$pom::核心模块不允许依赖 Spring 或 pi —— 这会破坏「可脱离 Spring / 可换推理引擎」的契约"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then exit 1; fi
+          echo "核心模块依赖边界检查通过 ✓"

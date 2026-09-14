@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1090" width="1280" height="1090">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', 'SimHei', sans-serif; }
+  .ts { font-size: 13px; font-weight: 600; fill: #111827; }
+  .ss { font-size: 11px; fill: #6b7280; }
+  .bd { font-size: 12px; font-weight: 600; fill: #6b7280; letter-spacing: 0.5px; }
+  .an { font-size: 11px; fill: #374151; }
+  .lg { font-size: 12px; fill: #4b5563; }
+  .ti { font-size: 18px; font-weight: 600; fill: #111827; }
+</style>
+<defs>
+  <marker id="ar-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+  </marker>
+  <marker id="ar-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+  </marker>
+  <marker id="ar-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#9333ea"/>
+  </marker>
+  <marker id="ar-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+  </marker>
+  <marker id="ar-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/>
+  </marker>
+</defs>
+<rect width="1280" height="1090" fill="#ffffff"/>
+<text class="ti" x="44" y="34">意图执行 · 能力端口与内置能力工具接入架构</text>
+<rect x="44" y="56" width="1192" height="146" rx="10" ry="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="77">MCP 客户端 · 只读外部工具的通用入口（pi-java McpClient 已实现）</text>
+<rect x="64" y="92" width="300" height="86" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="214" y="114" text-anchor="middle">MCP 知识库工具</text>
+<text class="ss" x="214" y="134" text-anchor="middle">knowledge_search</text>
+<text class="ss" x="214" y="152" text-anchor="middle">只读 · 无需用户身份</text>
+<rect x="484" y="92" width="300" height="86" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="634" y="114" text-anchor="middle">MCP 本体 / 元数据工具</text>
+<text class="ss" x="634" y="134" text-anchor="middle">describe_entity</text>
+<text class="ss" x="634" y="152" text-anchor="middle">只读 · 无需用户身份</text>
+<rect x="904" y="92" width="312" height="86" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="5,3"/>
+<text class="ts" x="1060" y="114" text-anchor="middle">MCP 只读业务工具</text>
+<text class="ss" x="1060" y="134" text-anchor="middle">外部系统只读查询</text>
+<text class="ss" x="1060" y="152" text-anchor="middle">写操作 → 走意图网关（M2）</text>
+<text class="an" x="44" y="222">MCP 是独立进程，拿不到宿主登录用户 —— 故只用于只读；需要身份与审批的写操作走意图网关。</text>
+<rect x="44" y="244" width="1192" height="108" rx="10" ry="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="265">意图执行层 · next-agent / intent-sdk-pi</text>
+<rect x="204" y="278" width="190" height="58" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="299" y="300" text-anchor="middle">AgentExecutor</text>
+<text class="ss" x="299" y="320" text-anchor="middle">主循环 · 合并两套工具</text>
+<rect x="424" y="278" width="190" height="58" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="519" y="300" text-anchor="middle">FlowExecutor</text>
+<text class="ss" x="519" y="320" text-anchor="middle">确定性流程编排</text>
+<rect x="644" y="278" width="242" height="58" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="765" y="300" text-anchor="middle">HostToolRegistry</text>
+<text class="ss" x="765" y="320" text-anchor="middle">宿主业务工具注册表</text>
+<rect x="886" y="278" width="350" height="58" rx="8" ry="8" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+<text class="ts" x="1061" y="300" text-anchor="middle">CapabilityTools</text>
+<text class="ss" x="1061" y="320" text-anchor="middle">能力工具注册表（由端口构造，不受意图白名单管辖）</text>
+<rect x="44" y="374" width="1192" height="114" rx="10" ry="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="395">业务宿主工具 · 进程内直调宿主 SDK（权限与事务随调用栈自动生效） · 受 IntentSpec.tools 白名单管辖</text>
+<rect x="264" y="410" width="190" height="62" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="359" y="432" text-anchor="middle">CRM 业务工具</text>
+<text class="ss" x="359" y="452" text-anchor="middle">IntentTool 实现</text>
+<rect x="490" y="410" width="190" height="62" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="585" y="432" text-anchor="middle">合约业务工具</text>
+<text class="ss" x="585" y="452" text-anchor="middle">IntentTool 实现</text>
+<rect x="716" y="410" width="242" height="62" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="837" y="432" text-anchor="middle">MCP 工具适配器</text>
+<text class="ss" x="837" y="452" text-anchor="middle">MCP → IntentTool</text>
+<rect x="44" y="510" width="1192" height="108" rx="10" ry="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="531">能力工具层 · 由能力端口构造的内置工具（SDK 提供，不受意图工具白名单管辖）</text>
+<rect x="204" y="544" width="312" height="62" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="360" y="566" text-anchor="middle">knowledge_search</text>
+<text class="ss" x="360" y="586" text-anchor="middle">数据型 · 模型按需检索，丰富上下文</text>
+<rect x="624" y="544" width="312" height="62" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="780" y="566" text-anchor="middle">describe_entity / resolve_entity</text>
+<text class="ss" x="780" y="586" text-anchor="middle">数据型 · 模型探索本体</text>
+<rect x="44" y="640" width="1192" height="128" rx="10" ry="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="661">能力端口 ACL · 意图 SDK 定义的抽象（依赖倒置的"抽象"一端；外部术语到此为止）</text>
+<rect x="64" y="674" width="552" height="84" rx="8" ry="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text class="ts" x="340" y="696" text-anchor="middle">«interface»  KnowledgeBase</text>
+<text class="ss" x="340" y="716" text-anchor="middle">数据型端口 · kb / query / chunk · 可工具化</text>
+<text class="ss" x="340" y="734" text-anchor="middle">supports(kb) · retrieve(kb, query, topK)</text>
+<rect x="664" y="674" width="552" height="84" rx="8" ry="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text class="ts" x="940" y="696" text-anchor="middle">«interface»  Ontology</text>
+<text class="ss" x="940" y="716" text-anchor="middle">约束型端口 · 实体 / 字段 / 关系</text>
+<text class="ss" x="940" y="734" text-anchor="middle">candidateValues() → 参数 enum      validate() → 执行前准入</text>
+<rect x="44" y="790" width="1192" height="138" rx="10" ry="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="811">适配器层 · 每个实现翻译一家的术语（新增一家 = 新增一个实现，意图规范零改动）</text>
+<rect x="64" y="826" width="272" height="84" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="200" y="848" text-anchor="middle">Yudao 知识库适配器</text>
+<text class="ss" x="200" y="868" text-anchor="middle">AiKnowledgeSegmentService</text>
+<text class="ss" x="200" y="886" text-anchor="middle">本仓待建 · 约 15 行</text>
+<rect x="360" y="826" width="272" height="84" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="496" y="848" text-anchor="middle">外部 RAG 适配器</text>
+<text class="ss" x="496" y="868" text-anchor="middle">Dify / RAGFlow / 向量库</text>
+<text class="ss" x="496" y="886" text-anchor="middle">客户已建成则直连</text>
+<rect x="656" y="826" width="272" height="84" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="792" y="848" text-anchor="middle">Yudao 实体适配器</text>
+<text class="ss" x="792" y="868" text-anchor="middle">entityIdValidator</text>
+<text class="ss" x="792" y="886" text-anchor="middle">本仓待建 · 复用实体候选链路</text>
+<rect x="952" y="826" width="264" height="84" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="1084" y="848" text-anchor="middle">数据字典适配器</text>
+<text class="ss" x="1084" y="868" text-anchor="middle">DataHub / 自建元数据</text>
+<text class="ss" x="1084" y="886" text-anchor="middle">外部系统 · 已建成则直连</text>
+<rect x="44" y="950" width="1192" height="130" rx="10" ry="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" stroke-dasharray="6,4"/>
+<text class="bd" x="58" y="971">基础设施层 · 客户的既有系统（SDK 不感知其形态）</text>
+<rect x="64" y="984" width="272" height="80" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="200" y="1006" text-anchor="middle">AI 知识库 RAG</text>
+<text class="ss" x="200" y="1026" text-anchor="middle">向量检索 + Rerank</text>
+<text class="ss" x="200" y="1044" text-anchor="middle">AiKnowledgeSegmentServiceImpl</text>
+<rect x="360" y="984" width="272" height="80" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="496" y="1006" text-anchor="middle">外部知识库</text>
+<text class="ss" x="496" y="1026" text-anchor="middle">HTTP / SDK</text>
+<text class="ss" x="496" y="1044" text-anchor="middle">Dify / RAGFlow / Milvus</text>
+<rect x="656" y="984" width="272" height="80" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="792" y="1006" text-anchor="middle">实体校验服务</text>
+<text class="ss" x="792" y="1026" text-anchor="middle">crm.Customer / crm.Contract</text>
+<text class="ss" x="792" y="1044" text-anchor="middle">宿主既有 Service（不新建）</text>
+<rect x="952" y="984" width="264" height="80" rx="8" ry="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+<text class="ts" x="1084" y="1006" text-anchor="middle">数据字典 / Catalog</text>
+<text class="ss" x="1084" y="1026" text-anchor="middle">元数据平台</text>
+<text class="ss" x="1084" y="1044" text-anchor="middle">客户已建成则直连</text>
+<line x1="266" y1="376" x2="266" y2="340" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="733" y1="376" x2="733" y2="340" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="988" y1="376" x2="988" y2="340" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="1134" y1="376" x2="1134" y2="340" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<rect x="585" y="358" width="91" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="630" y="370" text-anchor="middle" fill="#2563eb">合并两套工具后一并给模型</text>
+<line x1="313" y1="472" x2="313" y2="600" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="539" y1="472" x2="539" y2="600" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="791" y1="472" x2="791" y2="600" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="988" y1="472" x2="988" y2="600" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="1134" y1="472" x2="1134" y2="600" stroke="blue" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<line x1="272" y1="638" x2="272" y2="602" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<rect x="325" y="614" width="71" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="360" y="626" text-anchor="middle" fill="#374151">由端口构造内置工具</text>
+<path d="M 934,640 L 934,628 L 1230,628 L 1230,600" fill="none" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<rect x="998" y="612" width="124" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="1060" y="624" text-anchor="middle" fill="#374151">约束型端口 · 校验 / 参数枚举</text>
+<line x1="534" y1="608" x2="534" y2="672" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<path d="M 762,608 L 762,628 L 880,628 L 880,672" fill="none" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<rect x="716" y="606" width="144" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="788" y="618" text-anchor="middle" fill="#16a34a">确定性通道 · 注入上下文 / 校验入参</text>
+<line x1="200" y1="762" x2="200" y2="824" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<line x1="496" y1="762" x2="496" y2="824" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<line x1="792" y1="762" x2="792" y2="824" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<line x1="1084" y1="762" x2="1084" y2="824" stroke="green" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<line x1="200" y1="914" x2="200" y2="982" stroke="gray" stroke-width="1.5" marker-end="url(#ar-gray)"/>
+<line x1="496" y1="914" x2="496" y2="982" stroke="gray" stroke-width="1.5" marker-end="url(#ar-gray)"/>
+<line x1="792" y1="914" x2="792" y2="982" stroke="gray" stroke-width="1.5" marker-end="url(#ar-gray)"/>
+<line x1="1084" y1="914" x2="1084" y2="982" stroke="gray" stroke-width="1.5" marker-end="url(#ar-gray)"/>
+<path d="M 214,90 L 214,192 L 700,192 L 700,676" fill="none" stroke="purple" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ar-purple)"/>
+<rect x="426" y="174" width="269" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="560" y="186" text-anchor="middle" fill="#9333ea">MCP 工具适配器 → 包成 KnowledgeBase / Ontology</text>
+<path d="M 763,90 L 763,214 L 830,214 L 830,672" fill="none" stroke="purple" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ar-purple)"/>
+<rect x="836" y="196" width="104" height="16" rx="3" fill="#ffffff" opacity="0.95"/>
+<text class="an" x="888" y="208" text-anchor="middle" fill="#9333ea">MCP → Ontology</text>
+<rect x="44" y="1096" width="1192" height="96" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+<text class="lg" x="60" y="1120" font-weight="600">图例</text>
+<line x1="104" y1="1116" x2="136" y2="1116" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar-blue)"/>
+<text class="lg" x="142" y="1120">业务工具链路（受意图白名单）</text>
+<line x1="358" y1="1116" x2="390" y2="1116" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ar-green)"/>
+<text class="lg" x="396" y="1120">能力端口：依赖倒置（抽象 ← 外部实现）+ 确定性通道</text>
+<line x1="764" y1="1116" x2="796" y2="1116" stroke="#9333ea" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ar-purple)"/>
+<text class="lg" x="802" y="1120">MCP 工具通道（只读 / 无用户身份）</text>
+<line x1="1076" y1="1116" x2="1108" y2="1116" stroke="#6b7280" stroke-width="1.5" marker-end="url(#ar-gray)"/>
+<text class="lg" x="1114" y="1120">适配器 → 客户既有系统</text>
+<text class="lg" x="60" y="1146">能力端口与业务工具彻底分开：业务工具受 IntentSpec.tools 白名单管辖；能力工具由 SDK 提供，租户不能通过白名单把自己配成「不能检索知识库」。</text>
+<text class="lg" x="60" y="1166">数据型端口（知识库）可安全工具化，由模型按需调用；约束型端口（实体校验 / 参数枚举）走确定性通道，不依赖模型配合。</text>
+<text class="lg" x="60" y="1186">本体是增强项：Ontologies.empty() 时放行全部校验，行为与接入前完全一致。</text>
+</svg>

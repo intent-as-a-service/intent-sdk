@@ -1,0 +1,32 @@
+# =============================================================
+# 执行器档案示例：意图通过 executor: <id> 按名引用，档案独立演进
+# （换模型 / 调整工具白名单 / 调限额，引用它的意图自动受益）
+#
+# 加载：ExecutorProfileLoader.loadDir(目录) → 逐个校验
+# 构建：ExecutorProfiles.build(档案, 宿主工具, 意图目录) → 注册进
+#       IntentRuntimeConfig.customExecutors
+# =============================================================
+
+id: sales-analyst-v2
+type: agent                # agent=推理循环（当前可构建）；skill/remote 规划 M2.3
+name: 销售分析师
+description: 会调 CRM 工具多步推理的销售分析执行器
+
+model:                     # 该执行器专属模型；apiKey 留空则回退环境变量（如 DEEPSEEK_API_KEY）
+  baseUrl: https://api.deepseek.com
+  provider: deepseek
+  modelId: deepseek-chat
+
+tools:                     # 执行器级工具白名单（能力上限；删除本节 = 不限）
+  - crm_get_customer       # 意图的 tools 声明必须是其子集，越界即配置错误
+  - crm_list_follow_ups
+
+# knowledge:               # 知识库附件（检索实现规划中，声明即构建失败，不静默忽略）
+#   - kb: 产品手册
+#     topK: 5
+# skills: []               # 技能编排（M2.3）
+# memory: customer         # 会话记忆（规划中）
+
+limits:
+  maxTurns: 8              # 单次执行最大推理轮数（不配 = 12）
+  outputMaxRetries: 1      # 出参不合规整体重试次数（不配 = 1，显式 0 = 不重试）

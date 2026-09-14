@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.intent-as-a-service</groupId>
+        <artifactId>intent-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>intent-sdk-gateway</artifactId>
+    <name>Intent SDK Gateway (pluggable)</name>
+    <description>可组装网关客户端：装配后解锁跨系统意图；不装配时宿主自动降级 local-only。</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.intent-as-a-service</groupId>
+            <artifactId>intent-protocol</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.intent-as-a-service</groupId>
+            <artifactId>intent-sdk-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,27 @@
+# =============================================================
+# skill 型执行器示例：确定性流程——固定步骤、每步可调工具
+# 与 agent 型的分工：agent 型让模型现场规划"怎么做"；skill 型把"怎么做"
+# 固化为流程，确定性、可审计、低 token（纯工具步骤零 LLM 不触网）
+# =============================================================
+
+id: collect-sop
+type: skill
+name: 标准催收流程
+description: 查客户 → 取跟进档案 → 按模板组装标准卡片
+
+steps:
+  - name: lookup                # 步骤输出经 steps.<name>.text 供后续引用
+    tool: crm_get_customer      # 工具步骤：直调宿主工具（须已注册）
+    args:
+      customerId: "${params.customerId}"
+  - name: followups
+    tool: crm_list_follow_ups
+    args:
+      customerId: "${params.customerId}"
+  # - name: 总结                # LLM 步骤：单次推理（此时档案须配置 model）
+  #   prompt: "总结客户跟进情况：${steps.lookup.text}"
+
+output:                         # 缺省 = 标准卡片（title/summary/blocks）
+  title: "催收跟进报告"          # 模板值为合法 JSON 时按结构化放入（如 blocks）
+  summary: "客户 ${params.customerId} 最新跟进：${steps.followups.text}"
+  blocks: '[{"kind":"text","text":"${steps.lookup.text}"}]'

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.intent-as-a-service</groupId>
+        <artifactId>intent-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>intent-sdk-core</artifactId>
+    <name>Intent SDK Core</name>
+    <description>嵌入式意图运行时（与推理框架无关）：IntentSpec 加载校验、意图执行器 SPI 与执行编排、
+        宿主工具 SPI、执行留痕、意图目录增强。不依赖任何具体 agent 框架——
+        推理内核由 intent-sdk-pi 等适配器模块提供。</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.intent-as-a-service</groupId>
+            <artifactId>intent-protocol</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

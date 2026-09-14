@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1100" width="1240" height="1100">
+  <style>
+    text { font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', SimHei, sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="1240" height="1100" fill="#ffffff"/>
+  <text x="620" y="40" text-anchor="middle" font-size="18" font-weight="600" fill="#111827">意图即服务 · 目标态集成架构</text>
+  <text x="620" y="64" text-anchor="middle" font-size="12" fill="#6b7280">宿主只实现 6 个 SPI 接口 + 写声明　|　300 行样板收敛成一个 starter 依赖　|　一个接触面，换产品只换适配</text>
+  <rect x="40" y="88" width="1160" height="176" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="56" y="112" font-size="13" font-weight="600" fill="#1d4ed8">宿主前端 · 只维护一份原生 JS（框架无关：Vue2 / Vue3 / React / jQuery / JSP 通用）</text>
+  <rect x="64" y="126" width="360" height="62" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="244" y="152" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">intent-ui-sdk.js（唯一交付形态）</text>
+  <text x="244" y="170" text-anchor="middle" font-size="11" fill="#6b7280">原生 JS · 悬浮球 / 抽屉 / 结果卡</text>
+  <rect x="440" y="126" width="360" height="62" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="620" y="152" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">页面上下文注册</text>
+  <text x="620" y="170" text-anchor="middle" font-size="11" fill="#6b7280">每页 5~10 行 · 声明当前对象</text>
+  <rect x="816" y="126" width="360" height="62" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="996" y="152" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">意图中心 / 意图管理</text>
+  <text x="996" y="170" text-anchor="middle" font-size="11" fill="#6b7280">官方页面 · 可按需裁剪</text>
+  <rect x="64" y="198" width="1112" height="48" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="620" y="227" text-anchor="middle" font-size="12" fill="#374151">全局挂载：挂到 body 即可，不改宿主布局 / 路由 / 状态管理 · 主题、语言、鉴权方式均为配置项</text>
+  <rect x="40" y="284" width="1160" height="360" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+  <text x="56" y="308" font-size="13" font-weight="600" fill="#15803d">宿主后端 · 只做两件事：实现适配接口 + 写业务声明</text>
+  <text x="1184" y="308" text-anchor="end" font-size="11" fill="#6b7280">以下全部是宿主自己写的代码，合计约 60~100 行</text>
+  <rect x="64" y="322" width="620" height="308" rx="10" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2"/>
+  <text x="78" y="344" font-size="12" font-weight="600" fill="#166534">① 宿主适配层 —— 唯一的接触面</text>
+  <rect x="78" y="356" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="222" y="384" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentPrincipalProvider</text>
+  <text x="222" y="404" text-anchor="middle" font-size="11" fill="#6b7280">当前用户 + 角色 / 岗位</text>
+  <rect x="382" y="356" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="526" y="384" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentPermissionPolicy</text>
+  <text x="526" y="404" text-anchor="middle" font-size="11" fill="#6b7280">意图可见性判定（替代厂商专有角色 API）</text>
+  <rect x="78" y="436" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="222" y="464" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentContextBridge</text>
+  <text x="222" y="484" text-anchor="middle" font-size="11" fill="#6b7280">安全 / 租户上下文透传到工具线程</text>
+  <rect x="382" y="436" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="526" y="464" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentSpecRepository</text>
+  <text x="526" y="484" text-anchor="middle" font-size="11" fill="#6b7280">意图与配置（文件 / DB 两种实现）</text>
+  <rect x="78" y="516" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="222" y="544" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentTraceStore</text>
+  <text x="222" y="564" text-anchor="middle" font-size="11" fill="#6b7280">执行留痕（JSONL / DB）</text>
+  <rect x="382" y="516" width="288" height="68" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="526" y="544" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">IntentRuleSource</text>
+  <text x="526" y="564" text-anchor="middle" font-size="11" fill="#6b7280">事实规则来源（声明式）</text>
+  <text x="78" y="612" font-size="11" fill="#15803d">每个接口都带默认实现（内存 / 文件 / DB），宿主只覆盖需要定制的部分 —— 零建表即可跑通</text>
+  <rect x="704" y="322" width="472" height="308" rx="10" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2"/>
+  <text x="718" y="344" font-size="12" font-weight="600" fill="#166534">② 业务声明（业务团队维护，不写框架代码）</text>
+  <rect x="718" y="358" width="444" height="54" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="732" y="380" font-size="13" font-weight="600" fill="#111827">工具 Bean</text>
+  <text x="732" y="398" font-size="11" fill="#6b7280">AgentTool 白名单 · 复用宿主内部 API</text>
+  <rect x="718" y="426" width="444" height="54" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="732" y="448" font-size="13" font-weight="600" fill="#111827">意图 YAML</text>
+  <text x="732" y="466" font-size="11" fill="#6b7280">pages / paramsSchema / context / tools</text>
+  <rect x="718" y="494" width="444" height="54" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="732" y="516" font-size="13" font-weight="600" fill="#111827">事实规则 YAML</text>
+  <text x="732" y="534" font-size="11" fill="#6b7280">一条规则 = 查询 + 条件 + 模板 + 参数映射</text>
+  <rect x="718" y="562" width="444" height="54" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="732" y="584" font-size="13" font-weight="600" fill="#111827">复杂场景增强器（可选）</text>
+  <text x="732" y="602" font-size="11" fill="#6b7280">声明式表达不了时，才落 Java</text>
+  <line x1="64" y1="664" x2="1176" y2="664" stroke="#86efac" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="64" y="658" font-size="11" fill="#15803d">唯一的接触面：6 个 SPI 接口 + 声明文件</text>
+  <text x="1184" y="658" text-anchor="end" font-size="11" fill="#15803d">不再是复制源码</text>
+  <path d="M 612,650 V 680" stroke="#16a34a" stroke-width="1.6" fill="none" marker-end="url(#arrow-green)"/>
+  <text x="64" y="682" font-size="11.5" fill="#374151">宿主依赖一个 starter（Maven 制品），进程内调用 SDK 运行时；装配与默认实现全部由 starter 提供</text>
+  <rect x="40" y="700" width="1160" height="212" rx="12" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5"/>
+  <text x="56" y="724" font-size="13" font-weight="600" fill="#374151">SDK 制品 · 宿主框架无关（不再复制源码，随版本升级）</text>
+  <text x="1184" y="724" text-anchor="end" font-size="11" fill="#6b7280">已发布 Maven · 正式版本号 · 含 LICENSE</text>
+  <rect x="64" y="736" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="244" y="768" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">intent-spring-boot-starter</text>
+  <text x="244" y="788" text-anchor="middle" font-size="11" fill="#6b7280">自动装配 · 配置绑定</text>
+  <rect x="440" y="736" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="620" y="768" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">默认实现（可覆盖）</text>
+  <text x="620" y="788" text-anchor="middle" font-size="11" fill="#6b7280">Repository 三种：内存 / 文件 / DB</text>
+  <rect x="816" y="736" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="996" y="768" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">控制器与服务</text>
+  <text x="996" y="788" text-anchor="middle" font-size="11" fill="#6b7280">目录 / 执行 / 配置 / 留痕 API</text>
+  <rect x="64" y="824" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="244" y="856" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">intent-protocol</text>
+  <text x="244" y="876" text-anchor="middle" font-size="11" fill="#6b7280">IntentSpec / IntentRequest 契约</text>
+  <rect x="440" y="824" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="620" y="856" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">intent-sdk-core</text>
+  <text x="620" y="876" text-anchor="middle" font-size="11" fill="#6b7280">运行时 · 执行器三型 · 目录装配</text>
+  <rect x="816" y="824" width="360" height="76" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="996" y="856" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">intent-sdk-gateway（可选）</text>
+  <text x="996" y="876" text-anchor="middle" font-size="11" fill="#6b7280">跨系统编排 · 未启用自动降级</text>
+  <rect x="64" y="932" width="740" height="76" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="78" y="958" font-size="12" font-weight="600" fill="#1d4ed8">场景包（Scenario Pack）—— 标准化的单位</text>
+  <rect x="78" y="968" width="96" height="26" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="126" y="985" text-anchor="middle" font-size="11" fill="#1d4ed8">意图包</text>
+  <rect x="186" y="968" width="96" height="26" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="234" y="985" text-anchor="middle" font-size="11" fill="#1d4ed8">事实包</text>
+  <rect x="294" y="968" width="96" height="26" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="342" y="985" text-anchor="middle" font-size="11" fill="#1d4ed8">适配包</text>
+  <text x="410" y="986" font-size="11" fill="#1d4ed8">换宿主产品时只重写适配包，意图包与事实包复用约 70%（复用率即可验收指标）</text>
+  <rect x="824" y="932" width="352" height="76" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="838" y="956" font-size="12" font-weight="600" fill="#92400e">分发与合规（P0 补齐）</text>
+  <text x="838" y="977" font-size="11" fill="#92400e">制品发布 Maven · LICENSE（建议 Apache-2.0）</text>
+  <text x="838" y="996" font-size="11" fill="#92400e">依赖收敛：只依赖窄接口，不绑 pi-agent</text>
+  <line x1="56" y1="1036" x2="86" y2="1036" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arrow-green)"/>
+  <text x="94" y="1040" font-size="12" fill="#6b7280">依赖与进程内调用（宿主 → SDK）</text>
+  <line x1="330" y1="1036" x2="366" y2="1036" stroke="#86efac" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="374" y="1040" font-size="12" fill="#6b7280">SPI 边界（唯一的接触面）</text>
+  <text x="56" y="1066" font-size="12" fill="#374151">对比当前态：复制 300 行样板 + 5 个耦合点　→　实现 6 个接口 + 写声明（约 60~100 行），其余由 starter 提供</text>
+</svg>
