@@ -35,10 +35,23 @@ jobs:
       #   cd intent-sdk && mvn install -DskipTests
       # =============================================================
       - name: Build (pi-free modules)
-        run: >
-          mvn -B -ntp
-          -pl intent-protocol,intent-sdk-core,intent-sdk-host,intent-sdk-gateway,intent-spring-boot-starter
-          -am verify
+        run: |
+          set -o pipefail
+          mvn -B -ntp \
+            -pl intent-protocol,intent-sdk-core,intent-sdk-host,intent-sdk-gateway,intent-spring-boot-starter \
+            -am verify 2>&1 | tee build.log
+
+      # 失败时把 Maven 的真实错误贴成 annotation。
+      # 动机：Actions 的原始日志下载需要 token，而 check-run 的 annotation 是公开可读的。
+      # 把关键错误行搬到这里，任何人在 API 上就能定位失败原因，不必登录翻日志。
+      - name: Surface failure as annotation
+        if: failure()
+        run: |
+          grep -nE "^\[ERROR\]|BUILD FAILURE|Caused by:|unmappable|Tests run:.*(Failures: [1-9]|Errors: [1-9])" build.log \
+            | head -n 15 > errs.txt || true
+          if [ ! -s errs.txt ]; then tail -n 15 build.log > errs.txt; fi
+          cat errs.txt
+          while IFS= read -r line; do echo "::error title=maven::${line:0:600}"; done < errs.txt
 
   guard-core-purity:
     name: 守卫「核心模块零 Spring / 零 pi 依赖」

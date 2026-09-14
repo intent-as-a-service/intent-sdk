@@ -134,6 +134,11 @@
                 <version>3.11.3</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <!-- 输出编码必须显式钉死 UTF-8：Linux runner 的默认 locale 常是 C/POSIX(ASCII)，
+                         此时中文注释会在生成文档阶段报 "unmappable character"，而 Windows 本地因默认
+                         编码能吃下中文而看不出来（本仓库确实踩过：CI 红、本地绿）。 -->
+                    <docencoding>UTF-8</docencoding>
+                    <charset>UTF-8</charset>
                     <doclint>none</doclint>
                     <quiet>true</quiet>
                 </configuration>
