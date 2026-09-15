@@ -12,6 +12,10 @@ target/
 *.jar
 *.war
 !.mvn/wrapper/maven-wrapper.jar
+# 例外：随仓库分发的 pi 本地包。
+# dev.pi 制品未发布到任何公共仓库，为了让 clone 后 mvn install 一定能成功，
+# 执行器所需的 pi jar 随仓库分发（见 pom.xml 顶部说明与 README「pi 本地包」一节）。
+!libs/**/*.jar
 
 # ---------------------------- IDE / 编辑器
 .idea/

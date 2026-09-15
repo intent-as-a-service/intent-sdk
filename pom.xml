@@ -36,21 +36,26 @@
     <modules>
         <module>intent-protocol</module>
         <module>intent-sdk-core</module>
+        <module>intent-sdk-pi</module>
         <module>intent-sdk-host</module>
         <module>intent-spring-boot-starter</module>
         <module>intent-sdk-gateway</module>
     </modules>
 
     <!--
-        注意：intent-sdk-pi 不在上面的默认模块列表里。
+        intent-sdk-pi（执行器：builtin-agent / skill / flow）依赖 dev.pi:pi-ai 与 dev.pi:pi-agent，
+        而这两个制品没有发布到任何公共仓库。
 
-        它依赖 dev.pi:pi-ai / dev.pi:pi-agent，而这两个制品目前尚未发布到任何公共仓库
-        （既不在一处中央仓，也没有公开的镜像）。一旦把它放进默认反应堆，
-        `mvn install` 对任何刚 clone 下来的人都会直接失败 —— 实测就是这样。
+        为了让 `git clone` 之后 `mvn install` 一定能成功、下游宿主也能解析 dev.pi 坐标，
+        执行器所需的 pi 制品已作为本地包随仓库分发：
 
-        所以默认构建只包含「零 pi 依赖」的五个模块，保证拿到代码就能构建通过；
-        需要执行器实现（builtin-agent / skill / flow）时用 -Pwith-pi 加回来，
-        前提是 dev.pi 制品已经可解析。
+            libs/dev/pi/{pi-java-parent, pi-ai, pi-agent, pi-telemetry}/0.1.0-SNAPSHOT/
+
+        构建时由下面的 vendor-pi profile（只在存在 libs/dev/pi 的根模块激活）把它们
+        安装进本地 Maven 仓，因此不依赖中央仓上是否有 pi 制品。
+
+        pi 的源码工程在：https://gitee.com/harvey_danny/pi-agent-java
+        需要升级 pi 时，重新构建该工程并替换 libs/ 下的 jar 与 pom 即可。
     -->
 
     <properties>
@@ -180,17 +185,75 @@
 
     <profiles>
         <!--
-            把执行器模块加回反应堆：mvn -Pwith-pi install
-
-            前置条件（二选一）：
-              1) 本地已有 dev.pi 制品：git clone <pi-java 仓库> && cd pi-java && mvn install -DskipTests
-              2) dev.pi 制品已发布到公共仓库（届时本 profile 可以并入默认构建）
+            仅在仓库根模块激活（只有根模块存在 libs/dev/pi）：
+            把随仓库分发的 pi 制品安装到本地 Maven 仓，使本仓的 intent-sdk-pi
+            以及下游宿主都能解析 dev.pi:* 坐标，无需任何公共仓库上有 pi。
         -->
         <profile>
-            <id>with-pi</id>
-            <modules>
-                <module>intent-sdk-pi</module>
-            </modules>
+            <id>vendor-pi</id>
+            <activation>
+                <file>
+                    <exists>${basedir}/libs/dev/pi</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>install-pi-java-parent</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${basedir}/libs/dev/pi/pi-java-parent/0.1.0-SNAPSHOT/pi-java-parent-0.1.0-SNAPSHOT.pom</file>
+                                    <groupId>dev.pi</groupId>
+                                    <artifactId>pi-java-parent</artifactId>
+                                    <version>0.1.0-SNAPSHOT</version>
+                                    <packaging>pom</packaging>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-pi-ai</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${basedir}/libs/dev/pi/pi-ai/0.1.0-SNAPSHOT/pi-ai-0.1.0-SNAPSHOT.jar</file>
+                                    <pomFile>${basedir}/libs/dev/pi/pi-ai/0.1.0-SNAPSHOT/pi-ai-0.1.0-SNAPSHOT.pom</pomFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-pi-agent</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${basedir}/libs/dev/pi/pi-agent/0.1.0-SNAPSHOT/pi-agent-0.1.0-SNAPSHOT.jar</file>
+                                    <pomFile>${basedir}/libs/dev/pi/pi-agent/0.1.0-SNAPSHOT/pi-agent-0.1.0-SNAPSHOT.pom</pomFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-pi-telemetry</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${basedir}/libs/dev/pi/pi-telemetry/0.1.0-SNAPSHOT/pi-telemetry-0.1.0-SNAPSHOT.jar</file>
+                                    <pomFile>${basedir}/libs/dev/pi/pi-telemetry/0.1.0-SNAPSHOT/pi-telemetry-0.1.0-SNAPSHOT.pom</pomFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- 发布到 Maven 中央仓库：mvn -Prelease deploy（需配置 gpg 与 distributionManagement） -->

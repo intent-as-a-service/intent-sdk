@@ -92,18 +92,9 @@ producing no todos.
 > cd intent-sdk && mvn install -DskipTests
 > ```
 >
-> That default build covers the five **pi-free** modules and needs nothing beyond Maven Central.
+> That one command builds **all six modules, executors included**, and needs nothing beyond Maven
+> Central — see [pi as a local package](#pi-as-a-local-package) for how that works.
 >
-> The executor module `intent-sdk-pi` (`builtin-agent` / `skill` / `flow`) depends on
-> `dev.pi:pi-ai` and `dev.pi:pi-agent`, which **are not published to any public repository yet** —
-> which is exactly why it is opt-in instead of part of the default reactor. Install it with:
->
-> ```bash
-> # once dev.pi artifacts are resolvable (installed locally, or published)
-> mvn -Pwith-pi install -DskipTests
-> ```
->
-> Running a reference host end to end needs the executors, so it needs that second command.
 > This section becomes a plain dependency once publishing lands.
 
 ### 1. Add the dependency
@@ -190,6 +181,31 @@ IntentUI.mountFloating({ getPage: () => route.path.slice(1), getContext: () => p
 Batteries included: floating entry point / intent menu / slot form / todo groups / result cards /
 execution trace / history / feedback. Works with Vue 2, Vue 3, React, jQuery and server-rendered
 templates alike ([intent-ui-sdk](https://github.com/intent-as-a-service/intent-ui-sdk)).
+
+## pi as a local package
+
+`intent-sdk-pi` — the executor module (`builtin-agent` / `skill` / `flow`) — is the only part of the
+SDK that depends on a specific agent framework:
+[pi-java](https://gitee.com/harvey_danny/pi-agent-java) (`dev.pi:pi-ai` + `dev.pi:pi-agent`).
+
+Those coordinates are **not published to any public repository**, so the required artifacts ship with
+this repository under [`libs/`](./libs):
+
+| Artifact | Version |
+|---|---|
+| `dev.pi:pi-java-parent` (pom) | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-ai` | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-agent` | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-telemetry` | 0.1.0-SNAPSHOT |
+
+A `vendor-pi` profile in the root `pom.xml` installs them into your local Maven repository during the
+build, so `mvn install` succeeds on a fresh clone with nothing but Maven Central plus those ~740 KB of
+local binaries. Details, upgrade procedure and licensing are in [`libs/README.md`](./libs/README.md):
+**the pi sources live at <https://gitee.com/harvey_danny/pi-agent-java>**, and pi is MIT
+(© 2026 AWCP).
+
+If you would rather use your own inference engine, drop `intent-sdk-pi` and implement the
+`IntentExecutor` contract — that module is the only one that would change.
 
 ## Hosts in production
 
@@ -321,18 +337,10 @@ templates alike ([intent-ui-sdk](https://github.com/intent-as-a-service/intent-u
 > cd intent-sdk && mvn install -DskipTests
 > ```
 >
-> 这条默认只构建**零 pi 依赖**的五个模块，除中央仓外不需要任何额外东西。
+> 这条命令会构建**全部六个模块（含执行器）**，除中央仓外不需要任何额外东西 ——
+> 原理见下方「pi 本地包」一节。
 >
-> 执行器模块 `intent-sdk-pi`（`builtin-agent` / `skill` / `flow`）依赖 `dev.pi:pi-ai` 与
-> `dev.pi:pi-agent`，**这两个制品目前尚未发布到任何公共仓库** —— 这正是它被做成可选、
-> 而不放进默认反应堆的原因。需要时用：
->
-> ```bash
-> # 前提：dev.pi 制品已可解析（本地已安装，或已发布到公共仓库）
-> mvn -Pwith-pi install -DskipTests
-> ```
->
-> 端到端跑起参考宿主需要执行器，所以还要执行上面这条。中央仓发布后本节会替换为直接引依赖。
+> 中央仓发布后本节会替换为直接引依赖。
 
 ### 1. 引依赖
 
@@ -413,6 +421,29 @@ IntentUI.mountFloating({ getPage: () => route.path.slice(1), getContext: () => p
 
 自带：悬浮入口 / 意图菜单 / 槽位表单 / 待办分组 / 结果卡片 / 执行轨迹 / 历史 / 反馈。
 Vue2 / Vue3 / React / jQuery / 服务端模板都能用（[intent-ui-sdk](https://github.com/intent-as-a-service/intent-ui-sdk)）。
+
+## pi 本地包
+
+`intent-sdk-pi`（执行器模块：`builtin-agent` / `skill` / `flow`）是整个 SDK 里唯一依赖具体
+agent 框架的部分：[pi-java](https://gitee.com/harvey_danny/pi-agent-java)
+（`dev.pi:pi-ai` + `dev.pi:pi-agent`）。
+
+这两个坐标**没有发布到任何公共仓**，因此所需制品随本仓分发在 [`libs/`](./libs) 下：
+
+| 制品 | 版本 |
+|---|---|
+| `dev.pi:pi-java-parent`（pom） | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-ai` | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-agent` | 0.1.0-SNAPSHOT |
+| `dev.pi:pi-telemetry` | 0.1.0-SNAPSHOT |
+
+根 `pom.xml` 里的 `vendor-pi` profile 会在构建时把它们安装进本地 Maven 仓，
+所以全新 clone 直接 `mvn install` 就能通过，除中央仓外只多这约 740 KB 本地二进制。
+细节、升级方法与许可证见 [`libs/README.md`](./libs/README.md)：
+**pi 的源码工程在 <https://gitee.com/harvey_danny/pi-agent-java>**，许可证为 MIT（© 2026 AWCP）。
+
+如果你想换成自己的推理引擎，去掉 `intent-sdk-pi` 并实现 `IntentExecutor` 契约即可 ——
+需要改动的只有这一个模块。
 
 ## 已落地的宿主框架
 
